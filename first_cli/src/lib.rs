@@ -39,14 +39,34 @@ pub fn search <'a> (query: &str, content: &'a str) -> Vec<&'a str> {
     return result;
 }
 
+pub fn search_case_insensitive <'a> (query: &str, content: &'a str) -> Vec<&'a str> {
+    let query_internal = query.to_lowercase();
+    let mut result = Vec::new();
+    for line in content.lines() {
+        if line.to_lowercase().contains(&query_internal) {
+            result.push(line);
+        }
+    }
+    return result;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*; // import everything from the parent
     #[test]
-    fn one_result () {
+    fn case_sensitive () {
         let query = "content";
         let content = "content of the first test";
 
         assert_eq!(vec!["content of the first test"], search(query, content));
     }
+
+    #[test]
+    fn case_insensitive () {
+        let query = "SometHinG";
+        let content = "someone somewhere doing something";
+
+        assert_eq!(vec!["someone somewhere doing something"], search_case_insensitive(query, content));
+    }
 }
+
