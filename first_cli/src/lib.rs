@@ -4,27 +4,33 @@ use std::error::Error; // for construction of the error type
 pub struct Config {
     pub query: String,
     pub file_name: String,
+    pub case_sensitive: bool,
 }
 
 impl Config {
     pub fn new( args: &[String] ) -> Result<Config, &str> {
 
-        if args.len() < 3 {
+        if args.len() < 4 {
             return Err("there isn't enough argument...");
         }
          let query = args[1].clone();
          let file_name = args[2].clone();
+         let case_sensitive = if args[3] == "true" { true } else { false };
 
-        return Ok(Config{ query, file_name });
+        return Ok(Config{ query, file_name, case_sensitive });
     }
 }
 
 pub fn run ( config: Config ) -> Result<(), Box<dyn Error>>{
      let content = fs::read_to_string(&config.file_name)?;
 
-     for line in search(&config.query, &content) {
-        println!("{}", line);
-     }
+     let result = if config.case_sensitive {
+         search(&config.query, &content)
+     } else {
+         search_case_insensitive(&config.query, &content)
+     };
+
+     println!("{:?}", result);
 
      return Ok(());
 }
