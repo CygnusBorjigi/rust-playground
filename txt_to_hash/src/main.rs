@@ -12,15 +12,29 @@ fn main() {
 
     // search and open file
     let file_content = fs::read_to_string(&input_args[1]).expect("file cannot be open");
-    println!("{:?}", file_content);
 
     // parse the file into indivisual words
     let file_char_list = explode(file_content);
-    println!("{}", file_char_list.len());
-    println!("{:?}", file_char_list);
-    
+
+    let result = lexer(file_char_list);
+    println!("{:?}", result);
+}
+
+fn lexer (source: Vec<char>) -> Element {
+    return Element::Word(String::from("Working"));
 }
 
 fn explode (source: String) -> Vec<char> {
     return source.chars().collect();
 }
+
+#[derive(Debug)]
+enum Element {
+    Word(String),
+    Punctuation(char),
+    WhiteSpace(i32),
+    LineBreak,
+}
+
+
+
