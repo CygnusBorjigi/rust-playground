@@ -35,6 +35,7 @@ fn char_to_word (source: Vec<Element>) -> Vec<Element> {
                         new_word.push(*a);
                     }
                     result.push(Element::Word(new_word));
+                    accum = Vec::new();
                 } 
                 result.push(Element::Punctuation(ele));
             },
@@ -45,6 +46,7 @@ fn char_to_word (source: Vec<Element>) -> Vec<Element> {
                         new_word.push(*a);
                     }
                     result.push(Element::Word(new_word));
+                    accum = Vec::new();
                 } 
                 result.push(Element::WhiteSpace(ele));
             },
@@ -55,6 +57,7 @@ fn char_to_word (source: Vec<Element>) -> Vec<Element> {
                         new_word.push(*a);
                     }
                     result.push(Element::Word(new_word));
+                    accum = Vec::new();
                 } 
                 result.push(Element::LineBreak);
             },
@@ -88,7 +91,7 @@ fn identify_char_whitespace_linebreak (source: Vec<char>) -> Vec<Element> {
 }
 
 fn is_poun (source: char) -> bool {
-    let target = ",.:;'";
+    let target = ",.:;-'";
     return target.contains(source);
 }
 
