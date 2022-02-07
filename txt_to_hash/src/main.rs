@@ -16,8 +16,8 @@ fn main() {
     // parse the file into indivisual words
     let file_char_list = explode(file_content);
 
-    let result =  identify_char_whitespace_linebreak(file_char_list);
-    println!("{:?}", result);
+    let first_pass =  identify_char_whitespace_linebreak(file_char_list);
+    println!("{:?}", first_pass);
 }
 
 fn identify_char_whitespace_linebreak (source: Vec<char>) -> Vec<Element> {
@@ -27,11 +27,18 @@ fn identify_char_whitespace_linebreak (source: Vec<char>) -> Vec<Element> {
             Element::WhiteSpace(1)
         } else if each == &'\n' {
             Element::LineBreak
+        } else if is_poun(*each) {
+            Element::Punctuation(*each)
         } else {
             Element::Char(*each)
         }
     }).collect();
     return output;
+}
+
+fn is_poun (source: char) -> bool {
+    let target = ",.:;'";
+    return target.contains(source);
 }
 
 fn explode (source: String) -> Vec<char> {
