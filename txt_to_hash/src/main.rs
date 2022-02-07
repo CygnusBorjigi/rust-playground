@@ -13,13 +13,33 @@ fn main() {
     // search and open file
     let file_content = fs::read_to_string(&input_args[1]).expect("file cannot be open");
 
-    // parse the file into indivisual words
+    // parse the file into indivisual elements
     let file_char_list = explode(file_content);
 
     let first_pass =  identify_char_whitespace_linebreak(file_char_list);
     let second_pass = char_to_word(first_pass);
-    println!("{:?}", second_pass);
 
+    // build the hashmap
+    let hashmap = vect_to_hashmap(second_pass);
+    println!("{:?}", hashmap);
+
+}
+
+#[derive(Debug)]
+struct HashMap {
+    word: Vec<(String, i32)>,
+    punctuation: Vec<(char, i32)>,
+    whitespace: i32,
+    linebreak: i32,
+}
+
+fn vect_to_hashmap (souce: Vec<Element>) -> HashMap {
+    HashMap {
+        word: vec![(String::from("word is working"), 1)],
+        punctuation: vec![('c', 1)],
+        whitespace: 6,
+        linebreak:7,
+    }    
 }
 
 fn char_to_word (source: Vec<Element>) -> Vec<Element> {
