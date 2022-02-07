@@ -17,7 +17,58 @@ fn main() {
     let file_char_list = explode(file_content);
 
     let first_pass =  identify_char_whitespace_linebreak(file_char_list);
-    println!("{:?}", first_pass);
+    let second_pass = char_to_word(first_pass);
+    println!("{:?}", second_pass);
+
+}
+
+fn char_to_word (source: Vec<Element>) -> Vec<Element> {
+    let mut result = Vec::new();
+    let mut accum = Vec::new();
+    for i in source {
+        match i {
+            Element::Char(ele) => accum.push(ele),
+            Element::Punctuation(ele) => {
+                if &accum.len() != &0 {
+                    let mut new_word = String::from("");
+                    for a in &accum {
+                        new_word.push(*a);
+                    }
+                    result.push(Element::Word(new_word));
+                } 
+                result.push(Element::Punctuation(ele));
+            },
+            Element::WhiteSpace(ele) => {
+                if &accum.len() != &0 {
+                    let mut new_word = String::from("");
+                    for a in &accum {
+                        new_word.push(*a);
+                    }
+                    result.push(Element::Word(new_word));
+                } 
+                result.push(Element::WhiteSpace(ele));
+            },
+            Element::LineBreak => {
+                if &accum.len() != &0 {
+                    let mut new_word = String::from("");
+                    for a in &accum {
+                        new_word.push(*a);
+                    }
+                    result.push(Element::Word(new_word));
+                } 
+                result.push(Element::LineBreak);
+            },
+            Element::Word(ele) => result.push(Element::Word(ele))
+        }
+    }
+    if &accum.len() != &0 {
+        let mut new_word = String::from("");
+        for a in &accum {
+            new_word.push(*a);
+        }
+        result.push(Element::Word(new_word));
+    }
+    return result;
 }
 
 fn identify_char_whitespace_linebreak (source: Vec<char>) -> Vec<Element> {
