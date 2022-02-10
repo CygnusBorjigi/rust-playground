@@ -1,19 +1,15 @@
 use std::env;
+use crate::hasher::Hashmap;
 mod user_input;
 mod parser;
+mod hasher;
 
 fn main() {
     let file_content: String = user_input::run(env::args().collect());
     let internal = parser::run(file_content);
-    println!("{:?}", internal);
+    let hash_map: Hashmap = hasher::run(internal);
+    println!("{:?}", hash_map);
 }
 
-#[derive(Debug)]
-struct HashMap {
-    word: Vec<(String, i32)>,
-    punctuation: Vec<(char, i32)>,
-    whitespace: i32,
-    linebreak: i32,
-}
 
 

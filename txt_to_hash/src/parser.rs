@@ -1,4 +1,3 @@
-
 pub fn run(file_content: String) -> Vec<Element> {
     let char_list: Vec<char> = explode(file_content);
     let first_pass = char_whitespace_linebreak(char_list);
