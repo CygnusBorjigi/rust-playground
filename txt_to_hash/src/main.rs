@@ -1,28 +1,15 @@
 use std::env;
-use std::fs;
+mod user_input;
 
 fn main() {
-    // take and check user input
-    let input_args: Vec<String> = env::args().collect();
-    if input_args.len() < 2 {
-        eprintln!("please enter the file name");
-    } else if input_args.len() > 2 {
-        eprintln!("only one argument is accepted");
-    };
-
-    // search and open file
-    let file_content = fs::read_to_string(&input_args[1]).expect("file cannot be open");
+    let file_content: String = user_input::run(env::args().collect());
 
     // parse the file into indivisual elements
     let file_char_list = explode(file_content);
 
     let first_pass =  identify_char_whitespace_linebreak(file_char_list);
     let second_pass = char_to_word(first_pass);
-
-    // build the hashmap
-    let hashmap = vect_to_hashmap(second_pass);
-    println!("{:?}", hashmap);
-
+    println!("{:?}", second_pass);
 }
 
 #[derive(Debug)]
@@ -33,14 +20,6 @@ struct HashMap {
     linebreak: i32,
 }
 
-fn vect_to_hashmap (souce: Vec<Element>) -> HashMap {
-    HashMap {
-        word: vec![(String::from("word is working"), 1)],
-        punctuation: vec![('c', 1)],
-        whitespace: 6,
-        linebreak:7,
-    }    
-}
 
 fn char_to_word (source: Vec<Element>) -> Vec<Element> {
     let mut result = Vec::new();
