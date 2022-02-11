@@ -8,10 +8,10 @@ pub fn run(inter_rep: Vec<Element>) -> Hashmap {
 
 #[derive(Debug)]
 pub struct Hashmap {
-    Words: Vec<(String, i64)>,
-    Puncutation: Vec<(char, i64)>,
-    Whitespace: i64,
-    Linebreak: i64,
+    words: Vec<(String, i64)>,
+    puncutation: Vec<(char, i64)>,
+    whitespace: i64,
+    linebreak: i64,
 }
 
 impl Hashmap {
@@ -19,12 +19,20 @@ impl Hashmap {
         for i in source{
             match i {
                 Element::Word(ele) => {
-                    println!("{:?}", ele);
+                    if Self::check_for_word(self, &ele) {
+                        Self::add_word_count(self, &ele);
+                    } else {
+                        Self::add_word(self, ele);
+                    }
                 },
                 Element::Punctuation(ele) => {
-                    println!("{:?}", ele);
+                    if Self::check_for_pun(self, &ele) {
+                        Self::add_pun_count(self, &ele);
+                    } else {
+                        Self::add_pun(self, ele);
+                    }
                 },
-                Element::Char(ele) => {
+                Element::Char(_) => {
                     eprintln!("internal parsing error");
                 },
                 Element::Whitespace(_) => {
@@ -41,15 +49,15 @@ impl Hashmap {
 impl Hashmap {
     fn create_map () -> Hashmap {
         Hashmap {
-            Words: [].to_vec(),
-            Puncutation: [].to_vec(),
-            Whitespace: 0,
-            Linebreak: 0,
+            words: [].to_vec(),
+            puncutation: [].to_vec(),
+            whitespace: 0,
+            linebreak: 0,
         }
     }
 
     fn check_for_word (&self, target: &String) -> bool{
-        let iter = self.Words.iter();
+        let iter = self.words.iter();
         for i in iter {
             if &i.0 == target {
                 return true
@@ -59,11 +67,11 @@ impl Hashmap {
     }
 
     fn add_word (&mut self, target: String) {
-        self.Words.push((target, 1));
+        self.words.push((target, 1));
     }
 
     fn add_word_count (&mut self, target: &String) {
-        for mut i in self.Words.iter_mut() {
+        for mut i in self.words.iter_mut() {
             if i.0 == *target {
                 i.1 += 1;
             }
@@ -71,7 +79,7 @@ impl Hashmap {
     }
 
     fn check_for_pun (&self, target: &char) -> bool {
-        let iter = self.Puncutation.iter();
+        let iter = self.puncutation.iter();
         for i in iter {
             if &i.0 == target {
                 return true
@@ -81,11 +89,11 @@ impl Hashmap {
     }
 
     fn add_pun (&mut self, target: char) {
-        self.Puncutation.push((target, 1));
+        self.puncutation.push((target, 1));
     }
 
     fn add_pun_count (&mut self, target: &char) {
-        for mut i in self.Puncutation.iter_mut() {
+        for mut i in self.puncutation.iter_mut() {
             if i.0 == *target {
                 i.1 += 1;
             }
@@ -93,10 +101,10 @@ impl Hashmap {
     }
 
     fn add_whitespace (&mut self) {
-        self.Whitespace += 1;
+        self.whitespace += 1;
     }
     fn add_linebreak (&mut self) {
-        self.Linebreak += 1;
+        self.linebreak += 1;
     }
 }
 
