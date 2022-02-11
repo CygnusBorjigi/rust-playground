@@ -2,10 +2,6 @@ pub use crate::parser::Element;
 
 pub fn run(inter_rep: Vec<Element>) -> Hashmap {
     let mut hash_map: Hashmap = Hashmap::create_map();
-    hash_map.add_word(String::from("Something"));
-    let to_change = String::from("Something");
-    hash_map.add_word_count(&to_change);
-    hash_map.add_word_count(&to_change);
     return hash_map;
 }
 
@@ -38,7 +34,7 @@ impl Hashmap {
     }
 
     fn add_word (&mut self, target: String) {
-        self.Words.push((target, 1))
+        self.Words.push((target, 1));
     }
 
     fn add_word_count (&mut self, target: &String) {
@@ -47,6 +43,35 @@ impl Hashmap {
                 i.1 += 1;
             }
         }
+    }
+
+    fn check_for_pun (&self, target: &char) -> bool {
+        let iter = self.Puncutation.iter();
+        for i in iter {
+            if &i.0 == target {
+                return true
+            }
+        }
+        return false
+    }
+
+    fn add_pun (&mut self, target: char) {
+        self.Puncutation.push((target, 1));
+    }
+
+    fn add_pun_count (&mut self, target: &char) {
+        for mut i in self.Puncutation.iter_mut() {
+            if i.0 == *target {
+                i.1 += 1;
+            }
+        }
+    }
+
+    fn add_whitespace (&mut self) {
+        self.Whitespace += 1;
+    }
+    fn add_linebreak (&mut self) {
+        self.Linebreak += 1;
     }
 }
 
