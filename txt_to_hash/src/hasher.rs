@@ -2,6 +2,7 @@ pub use crate::parser::Element;
 
 pub fn run(inter_rep: Vec<Element>) -> Hashmap {
     let mut hash_map: Hashmap = Hashmap::create_map();
+    hash_map.build_map(inter_rep);
     return hash_map;
 }
 
@@ -11,6 +12,30 @@ pub struct Hashmap {
     Puncutation: Vec<(char, i64)>,
     Whitespace: i64,
     Linebreak: i64,
+}
+
+impl Hashmap {
+    fn build_map (&mut self, source: Vec<Element>){
+        for i in source{
+            match i {
+                Element::Word(ele) => {
+                    println!("{:?}", ele);
+                },
+                Element::Punctuation(ele) => {
+                    println!("{:?}", ele);
+                },
+                Element::Char(ele) => {
+                    eprintln!("internal parsing error");
+                },
+                Element::Whitespace(_) => {
+                    Self::add_whitespace(self);
+                },
+                Element::Linebreak => {
+                    Self::add_linebreak(self);
+                },
+            }
+        }
+    }
 }
 
 impl Hashmap {
